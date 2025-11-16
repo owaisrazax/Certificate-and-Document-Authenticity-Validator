@@ -58,12 +58,8 @@ def binary_to_string(binary):
     return result
 
 
-def embed_lsb_advanced(image, secret_data):
-    """
-    Advanced LSB embedding - embeds data across ALL color channels (R, G, B).
-    Adds a header and footer for robust extraction.
-    """
-    #Prepare the data with markers
+def embed_lsb(image, secret_data):
+    #Prepared the data with markers
     header = "<<<START>>>"
     footer = "<<<END>>>"
     full_data = header + secret_data + footer
@@ -106,7 +102,7 @@ def embed_lsb_advanced(image, secret_data):
     return Image.fromarray(embedded_img.astype('uint8'))
 
 
-def extract_lsb_advanced(image):
+def extract_lsb(image):
     """
     Advanced LSB extraction - extracts from all color channels.
     Looks for header and footer markers.
@@ -207,7 +203,7 @@ def create_certificate():
                 print(f"Original image size: {cert_img.size}")
                 
                 #Embed the hash using LSB
-                watermarked_img = embed_lsb_advanced(cert_img, data_hash)
+                watermarked_img = embed_lsb(cert_img, data_hash)
                 
                 #Save
                 base_name = os.path.splitext(original_filename)[0]
@@ -267,7 +263,7 @@ def verify_certificate():
                 
                 # Extract hidden data
                 print("\nExtracting embedded data...")
-                extracted_hash = extract_lsb_advanced(cert_img)
+                extracted_hash = extract_lsb(cert_img)
                 
                 if not extracted_hash:
                     print("✗ RESULT: INVALID - No hidden data found")
